@@ -15,6 +15,7 @@ from urllib.parse import urlparse, urljoin
 auth = Blueprint('auth', __name__)
 
 
+
 def is_safe_url(target):
     ref_url = urlparse(request.host_url)
     test_url = urlparse(urljoin(request.host_url, target))
@@ -41,7 +42,7 @@ def get_current_user():
  
 @auth.route('/')
 @auth.route('/home')
-@login_required
+# @login_required
 def home():
     return Response('Success OK', 200, {})
     # return render_template('home.html')
@@ -50,8 +51,9 @@ def home():
 def check():
     print('--> HEADERS')
     print(request.headers)
+    logger.info(request.headers)
     print('--> REFERRER')
-    print(request.referrer)
+    logger.info(request.referrer)
 
     if current_user.is_authenticated:
         flash('You are already logged in.')

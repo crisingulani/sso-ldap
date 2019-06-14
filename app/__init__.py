@@ -1,6 +1,8 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager 
+import logging
+from logging.handlers import RotatingFileHandler
  
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
@@ -11,6 +13,10 @@ app.config['LDAP_PROTOCOL_VERSION'] = 3
 db = SQLAlchemy(app)
  
 app.secret_key = 'batman batman batman'
+
+handler = RotatingFileHandler('sso.log', maxBytes=10000, backupCount=1)
+handler.setLevel(logging.INFO)
+app.logger.addHandler(handler)
 
 logger = app.logger
 
