@@ -22,6 +22,13 @@ def is_safe_url(target):
            ref_url.netloc == test_url.netloc
 
 
+def authenticate():
+    """Sends a 401 response """
+    return Response(
+        'Could not verify your access level for that URL.\n'
+        'You have to login with proper credentials', 401, {})
+
+
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(int(id))
@@ -36,7 +43,7 @@ def get_current_user():
 @auth.route('/home')
 @login_required
 def home():
-    return Response('Success!', 200, {})
+    return Response('Success OK', 200, {})
     # return render_template('home.html')
 
 @auth.route('/check', methods=['GET'])
@@ -48,9 +55,9 @@ def check():
 
     if current_user.is_authenticated:
         flash('You are already logged in.')
-        return Response('Login successful', 200, {})
+        return Response('You are already logged in. (by login check)', 200, {})
 
-    return Response('Unauthorized', 401, {}) 
+    return authenticate()
  
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -61,7 +68,7 @@ def login():
 
     if current_user.is_authenticated:
         flash('You are already logged in.')
-        return Response('Login successful', 200, {})
+        return Response('You are already logged in. (by login page)', 200, {})
  
     form = LoginForm(request.form)
  
@@ -96,7 +103,7 @@ def login():
         #         return abort(400)
         #     return redirect(request.referrer)
             
-        return Response('Login successful', 200, {})
+        return Response('Login successful by login page', 200, {})
  
     if form.errors:
         flash(form.errors, 'danger')

@@ -1,2 +1,7 @@
 from app import app
-app.run(host='0.0.0.0', debug=True)
+import os
+
+port = os.getenv('PORT', '5000')
+host = os.getenv('HOST', '0.0.0.0')
+
+app.run(port=port, host=host)
